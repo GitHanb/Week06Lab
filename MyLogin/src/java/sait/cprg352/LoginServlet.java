@@ -7,6 +7,7 @@ package sait.cprg352;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,8 +22,11 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //display login.jsp
-        getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+        
+        String url = "/WEB-INF/login.jsp";
+        
+        getServletContext().getRequestDispatcher(url).forward(request, response);
+        
     }
 
     @Override
