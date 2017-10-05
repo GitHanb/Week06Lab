@@ -23,15 +23,22 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        HttpSession session = request.getSession();
-        UserService user = (UserService)session.getAttribute("user");
+        String username = request.getParameter("username");
         
-        if(user!=null)
+        HttpSession session = request.getSession();
+        Cookie[] cookies = request.getCookies();
+        String cookieName = "userCookie";
+        String cookieValue = "";
+        for(Cookie cookie: cookies )
         {
-            request.setAttribute("user", user);
-                  
-            //check checkbox
-            //request.setAttribute("remember", true);
+            if(cookieName.equals(cookie.getName()))
+            {
+                cookieValue = cookie.getValue();
+            }
+        }
+        if(cookieValue!=null)
+        {
+            request.setAttribute("username", username);
         }
         
         String action = request.getParameter("action");
