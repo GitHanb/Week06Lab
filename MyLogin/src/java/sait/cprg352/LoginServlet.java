@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -24,8 +25,17 @@ public class LoginServlet extends HttpServlet {
         //display login form
         String url = "/WEB-INF/login.jsp";
         getServletContext().getRequestDispatcher(url).forward(request, response);
+        /*
+        HttpSession session = request.getSession();
         
-        
+        UserService user = (UserService)session.getAttribute("user");
+        if(user==null)
+        {
+            user = new UserService();
+        }
+        //remove an object
+        session.removeAttribute("user");
+        */
         
     }
 
