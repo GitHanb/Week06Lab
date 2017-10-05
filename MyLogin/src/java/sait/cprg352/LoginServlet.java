@@ -23,23 +23,8 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        String username = request.getParameter("username");
-        
         HttpSession session = request.getSession();
-        Cookie[] cookies = request.getCookies();
-        String cookieName = "userCookie";
-        String cookieValue = "";
-        for(Cookie cookie: cookies )
-        {
-            if(cookieName.equals(cookie.getName()))
-            {
-                cookieValue = cookie.getValue();
-            }
-        }
-        if(cookieValue!=null)
-        {
-            request.setAttribute("username", username);
-        }
+        //check if cookie exists
         
         String action = request.getParameter("action");
         
@@ -93,21 +78,7 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             
-            //checkbox
-            
-            Cookie c = new Cookie("username", username);
-            c.setMaxAge(60);
-            c.setPath("/");
-            if(checkbox!=null)
-            {
-                //store username cookie
-                response.addCookie(c);
-            }
-            else
-            {
-                //remove username cookie
-                c.setMaxAge(0);
-            }
+            //store cookies
             
             getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
             return;
