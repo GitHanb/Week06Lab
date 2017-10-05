@@ -31,6 +31,9 @@ public class HomeServlet extends HttpServlet {
             
             return;
         }
+        
+        getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+        
     }
 
     @Override
