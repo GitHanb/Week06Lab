@@ -24,6 +24,9 @@ public class LoginServlet extends HttpServlet {
         //display login form
         String url = "/WEB-INF/login.jsp";
         getServletContext().getRequestDispatcher(url).forward(request, response);
+        
+        //if cookie exists, autofill in username and check checkbox
+        
         /*
         HttpSession session = request.getSession();
         
@@ -44,6 +47,7 @@ public class LoginServlet extends HttpServlet {
         
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        String checkbox = request.getParameter("remember");
         
         UserService user = new UserService();
         
@@ -69,7 +73,11 @@ public class LoginServlet extends HttpServlet {
             getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
             return;
         }
-        
+        if(checkbox.equals("true"))
+        {
+            //store username in a cookie
+            
+        }
         request.setAttribute("loginMessage", "Invalid username and password");
         getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
     }
