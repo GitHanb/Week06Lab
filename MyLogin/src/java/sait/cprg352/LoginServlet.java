@@ -27,7 +27,7 @@ public class LoginServlet extends HttpServlet {
         
         if (action.equals("logout")) 
         {
-            request.setAttribute("loginMessage", "You have successfully logged out!");
+            request.setAttribute("Message", "You have successfully logged out!");
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }
         
@@ -66,7 +66,7 @@ public class LoginServlet extends HttpServlet {
         }
         else if(username.isEmpty()||password.isEmpty())
         {
-            request.setAttribute("loginMessage", "Both vales are required!");
+            request.setAttribute("Message", "Both vales are required!");
             user.setUsername(username);
             user.setPassword(password);
             request.setAttribute("user", user); 
@@ -81,12 +81,7 @@ public class LoginServlet extends HttpServlet {
             getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
             return;
         }
-        if(checkbox.equals("true"))
-        {
-            //store username in a cookie
-            
-        }
-        request.setAttribute("loginMessage", "Invalid username and password");
+        request.setAttribute("Message", "Invalid username and password");
         getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
     }
 
