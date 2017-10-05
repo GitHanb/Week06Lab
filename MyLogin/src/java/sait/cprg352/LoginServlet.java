@@ -21,16 +21,16 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+        
         String action = request.getParameter("action");
         
         if (action.equals("logout")) 
         {
             request.setAttribute("loginMessage", "You have successfully logged out!");
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-            
-            return;
         }
-        getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+        
         
         
         //if cookie exists, autofill in username and check checkbox
