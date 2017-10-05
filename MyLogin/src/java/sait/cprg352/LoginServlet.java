@@ -7,6 +7,7 @@ package sait.cprg352;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,13 +25,13 @@ public class LoginServlet extends HttpServlet {
         
         HttpSession session = request.getSession();
         UserService user = (UserService)session.getAttribute("user");
+        
         if(user!=null)
         {
             request.setAttribute("user", user);
-        }
-        else
-        {
-            user = new UserService();
+                  
+            //check checkbox
+            //request.setAttribute("remember", true);
         }
         
         String action = request.getParameter("action");
@@ -50,22 +51,6 @@ public class LoginServlet extends HttpServlet {
         
         getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         
-        
-        
-        //if cookie exists, autofill in username and check checkbox
-        
-        /*
-        HttpSession session = request.getSession();
-        
-        
-        if(user==null)
-        {
-            user = new UserService();
-        }
-        //remove an object
-        
-        */
-        
     }
 
     @Override
@@ -74,7 +59,7 @@ public class LoginServlet extends HttpServlet {
         
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        //String checkbox = request.getParameter("remember");
+        String checkbox = request.getParameter("remember");
         
         UserService user = new UserService();
         
@@ -96,10 +81,33 @@ public class LoginServlet extends HttpServlet {
         {
             user.setUsername(username);
             user.setPassword(password);
-            request.setAttribute("user", user);    
+            request.setAttribute("user", user);
+            
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
+            
+            //checkbox
+            
+            Cookie c = new Cookie("username", username);
+            c.setMaxAge(60);
+            c.setPath("/");
+            if(checkbox!=null)
+            {
+                //store username cookie
+                response.addCookie(c);
+            }
+            else
+            {
+                //remove username cookie
+                c.setMaxAge(0);
+            }
+            
             getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
             return;
         }
+        user.setUsername(username);
+        user.setPassword(password);
+        request.setAttribute("user", user);
         request.setAttribute("Message", "Invalid username and password");
         getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
     }
