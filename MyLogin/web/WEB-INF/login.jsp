@@ -19,7 +19,7 @@
                 Password: <input type="text" name="password" value="${user.password}"><br>
                 <input type="submit" value="Login">  
             </form><br>
-            <input type="checkbox" name="remember" value="true" checked>Remember me<br><br>
+            <input type="checkbox" name="remember" value="true">Remember me<br><br>
             ${Message}
         </div>
     </body>
