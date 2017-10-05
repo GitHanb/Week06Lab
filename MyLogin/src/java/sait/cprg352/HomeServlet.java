@@ -22,16 +22,7 @@ public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
      
-        String logout = request.getParameter("logout");
         
-        if (logout.equals("true")) 
-        {
-            request.setAttribute("loginMessage", "You have successfully logged out!");
-            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-            
-            return;
-        }
-        getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
         
     }
 
