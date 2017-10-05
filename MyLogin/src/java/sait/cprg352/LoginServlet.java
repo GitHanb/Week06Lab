@@ -21,9 +21,11 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        //display login form
         String url = "/WEB-INF/login.jsp";
-        
         getServletContext().getRequestDispatcher(url).forward(request, response);
+        
+        
         
     }
 
@@ -33,6 +35,8 @@ public class LoginServlet extends HttpServlet {
         
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        
+         UserService user = new UserService();
         
         if(username==null || password==null)
         {
@@ -47,14 +51,14 @@ public class LoginServlet extends HttpServlet {
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
             return;
         }
-        
-        UserService user = new UserService();
-        if(user.login(username, password)==true)
+        else if(user.login(username, password)==true)
         {
             request.setAttribute("username", username);    
             getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+            return;
         }
-        
+        request.setAttribute("username", username);
+        request.setAttribute("password", password);
         request.setAttribute("loginMessage", "Invalid username and password");
         getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
     }
