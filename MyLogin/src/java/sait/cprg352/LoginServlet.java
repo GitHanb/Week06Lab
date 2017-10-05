@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -21,7 +22,16 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        
+        HttpSession session = request.getSession();
+        UserService user = (UserService)session.getAttribute("user");
+        if(user!=null)
+        {
+            request.setAttribute("user", user);
+        }
+        else
+        {
+            user = new UserService();
+        }
         
         String action = request.getParameter("action");
         
@@ -30,6 +40,8 @@ public class LoginServlet extends HttpServlet {
             if (action.equals("logout")) 
             {
                 request.setAttribute("Message", "You have successfully logged out!");
+                
+                session.removeAttribute("user");
                 getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
                 return;
             }
@@ -45,13 +57,13 @@ public class LoginServlet extends HttpServlet {
         /*
         HttpSession session = request.getSession();
         
-        UserService user = (UserService)session.getAttribute("user");
+        
         if(user==null)
         {
             user = new UserService();
         }
         //remove an object
-        session.removeAttribute("user");
+        
         */
         
     }
