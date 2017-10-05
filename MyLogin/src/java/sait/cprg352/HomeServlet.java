@@ -24,7 +24,7 @@ public class HomeServlet extends HttpServlet {
      
         String logout = request.getParameter("logout");
         
-        if (logout!= null) 
+        if (logout.equals("true")) 
         {
             request.setAttribute("loginMessage", "Logged out!");
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
