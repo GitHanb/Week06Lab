@@ -5,21 +5,20 @@
  */
 package sait.cprg352;
 
+import java.io.Serializable;
+
 /**
  *
- * @author 636334
+ * @author hanzh
  */
-public class UserService {
-    
-    private String username;
-    private String password;
+public class User implements Serializable
+{
+    private String  username;
+    private String  password;
 
-    public UserService(String username, String password) {
+    public User(String username, String password) {
         this.username = username;
         this.password = password;
-    }
-
-    public UserService() {
     }
 
     public String getUsername() {
@@ -40,7 +39,7 @@ public class UserService {
     
     public boolean login(String username, String password)
     {
-        if((username.equals("adam")|| username.equals("betty")) && password.equals("password"))
+        if((username.equals("adam")||username.equals("betty"))&& password.equals("password"))
         {
             return true;
         }
@@ -48,6 +47,5 @@ public class UserService {
         {
             return false;
         }
-        
     }
 }

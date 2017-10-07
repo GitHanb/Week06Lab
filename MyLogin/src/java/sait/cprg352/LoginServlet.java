@@ -73,7 +73,7 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         String checkbox = request.getParameter("remember");
         
-        UserService user = new UserService();
+        User user = new User(username, password);
         
         if(username==null || password==null)
         {
