@@ -39,16 +39,29 @@ public class LoginServlet extends HttpServlet {
                     request.setAttribute("username", cookie.getValue());
                 }
             }
-            if (action.equals("logout")) 
+            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+            session.invalidate();
+        }
+        else if (session.getAttribute("loggedInUsername")!=null)
+        {
+            response.sendRedirect("home");
+        }
+        else if(cookies!=null)
+        {
+            for(Cookie cookie:cookies)
             {
-                request.setAttribute("Message", "You have successfully logged out!");
-                
-                session.removeAttribute("user");
+                if(cookieName.equals(cookie.getName()))
+                {
+                    request.setAttribute("username", cookie.getValue());
+                }
                 getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-                return;
             }
         }
-        getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+        else
+        {
+            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+        }
+        
         
     }
 
@@ -65,7 +78,6 @@ public class LoginServlet extends HttpServlet {
         if(username==null || password==null)
         {
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-            return;
         }
         else if(username.isEmpty()||password.isEmpty())
         {
@@ -74,15 +86,11 @@ public class LoginServlet extends HttpServlet {
             request.setAttribute("password", password); 
             
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-            return;
         }
         else if(user.login(username, password)==true)
-        {
-            request.setAttribute("username", username);
-            request.setAttribute("password", password); 
-            
+        {   
             HttpSession session = request.getSession();
-            session.setAttribute("user", username);
+            session.setAttribute("loggedInUsername", username);
             
             if(checkbox==null)
             {
@@ -106,13 +114,17 @@ public class LoginServlet extends HttpServlet {
             
             //getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
             response.sendRedirect("home");
-            return;
+        }
+        else
+        {
+            request.setAttribute("username", username);
+            request.setAttribute("password", password); 
+            request.setAttribute("Message", "Invalid username and password");
+            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }
         
-        request.setAttribute("username", username);
-        request.setAttribute("password", password); 
-        request.setAttribute("Message", "Invalid username and password");
-        getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+        
+        
     }
 
 }
