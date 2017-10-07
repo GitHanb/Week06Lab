@@ -11,12 +11,18 @@ import java.io.Serializable;
  *
  * @author hanzh
  */
-public class User implements Serializable
+public class UserService implements Serializable
 {
-    private String  username;
-    private String  password;
+    private String username;
+    private String password;
 
-    public User(String username, String password) {
+    public UserService() 
+    {
+        username="";
+        password="";
+    }
+
+    public UserService(String username, String password) {
         this.username = username;
         this.password = password;
     }
@@ -48,4 +54,5 @@ public class User implements Serializable
             return false;
         }
     }
+
 }

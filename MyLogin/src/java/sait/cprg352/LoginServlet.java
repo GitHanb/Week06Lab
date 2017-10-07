@@ -73,7 +73,7 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         String checkbox = request.getParameter("remember");
         
-        User user = new User(username, password);
+        UserService myUser = new UserService(username, password);
         
         if(username==null || password==null)
         {
@@ -87,7 +87,7 @@ public class LoginServlet extends HttpServlet {
             
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }
-        else if(user.login(username, password)==true)
+        else if(myUser.login(username, password)==true)
         {   
             HttpSession session = request.getSession();
             session.setAttribute("loggedInUsername", username);
@@ -117,8 +117,7 @@ public class LoginServlet extends HttpServlet {
         }
         else
         {
-            request.setAttribute("username", username);
-            request.setAttribute("password", password); 
+            request.setAttribute("user", myUser);
             request.setAttribute("Message", "Invalid username and password");
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         } 
