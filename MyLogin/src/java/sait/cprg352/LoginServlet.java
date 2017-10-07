@@ -82,7 +82,7 @@ public class LoginServlet extends HttpServlet {
             request.setAttribute("password", password); 
             
             HttpSession session = request.getSession();
-            session.setAttribute("user", user);
+            session.setAttribute("user", username);
             
             if(checkbox==null)
             {
@@ -104,9 +104,11 @@ public class LoginServlet extends HttpServlet {
                 response.addCookie(cookie);
             }
             
-            getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+            //getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+            response.sendRedirect("home");
             return;
         }
+        
         request.setAttribute("username", username);
         request.setAttribute("password", password); 
         request.setAttribute("Message", "Invalid username and password");
