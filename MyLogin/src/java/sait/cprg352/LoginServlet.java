@@ -21,15 +21,16 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        Cookie[] cookies = request.getCookies();
-        String cookieName = "userCookie";
-        HttpSession session = request.getSession();
-        //check if cookie exists
-        
+            throws ServletException, IOException 
+    {
         String action = request.getParameter("action");
         
+        Cookie[] cookies = request.getCookies();
+        
+        String cookieName = "userCookie";
+        
+        HttpSession session = request.getSession();
+
         if(action!=null)
         {
             for(Cookie cookie: cookies)
@@ -73,7 +74,8 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         String checkbox = request.getParameter("remember");
         
-        UserService myUser = new UserService(username, password);
+        User myUser = new User(username, password);
+        UserService user = new UserService();
         
         if(username==null || password==null)
         {
@@ -82,15 +84,14 @@ public class LoginServlet extends HttpServlet {
         else if(username.isEmpty()||password.isEmpty())
         {
             request.setAttribute("Message", "Both vales are required!");
-            request.setAttribute("username", username);
-            request.setAttribute("password", password); 
+            request.setAttribute("user", myUser);
             
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }
-        else if(myUser.login(username, password)==true)
+        else if(user.login(username, password)==true)
         {   
             HttpSession session = request.getSession();
-            session.setAttribute("loggedInUsername", username);
+            session.setAttribute("user", myUser);
             
             if(checkbox==null)
             {
@@ -112,8 +113,8 @@ public class LoginServlet extends HttpServlet {
                 response.addCookie(cookie);
             }
             
-            //getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
-            response.sendRedirect("home");
+            getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+            //response.sendRedirect("home");
         }
         else
         {

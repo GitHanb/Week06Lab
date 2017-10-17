@@ -18,7 +18,8 @@
                 Username: <input type="text" name="username" value="${user.username}"><br>
                 Password: <input type="text" name="password" value="${user.password}"><br>
                 <input type="submit" value="Login">  
-            </form><br>
+            </form>
+            <br>
             <input type="checkbox" name="remember" value="${remember}">Remember me<br><br>
             ${Message}
         </div>
