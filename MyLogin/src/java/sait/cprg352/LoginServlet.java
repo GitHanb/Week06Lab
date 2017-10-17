@@ -37,13 +37,13 @@ public class LoginServlet extends HttpServlet {
             {
                 if(cookieName.equals(cookie.getName()))
                 {
-                    request.setAttribute("username", cookie.getValue());
+                    request.setAttribute("user", cookie.getValue());
                 }
             }
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
             session.invalidate();
         }
-        else if (session.getAttribute("loggedInUsername")!=null)
+        else if (session.getAttribute("user")!=null)
         {
             response.sendRedirect("home");
         }
@@ -53,7 +53,7 @@ public class LoginServlet extends HttpServlet {
             {
                 if(cookieName.equals(cookie.getName()))
                 {
-                    request.setAttribute("username", cookie.getValue());
+                    request.setAttribute("user", cookie.getValue());
                 }
                 getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
             }
