@@ -123,13 +123,13 @@ public class LoginServlet extends HttpServlet {
                  Cookie[] cookies =request.getCookies();
                  String cookiename = "username";
                  for(Cookie cookie : cookies)
-                     {
-                         if(cookie.getName().equals(cookiename))
-                         {
-                             cookie.setMaxAge(0);
-                             response.addCookie(cookie);
-                         }
-                     }
+                {
+                    if(cookie.getName().equals(cookiename))
+                    {
+                        cookie.setMaxAge(0);
+                        response.addCookie(cookie);
+                    }
+                }
             }
             HttpSession session = request.getSession();
             session.setAttribute("userlogin",myUser);   
