@@ -30,14 +30,10 @@ public class HomeServlet extends HttpServlet {
         {
             request.setAttribute("user", user);
             getServletContext().getRequestDispatcher(url).forward(request, response);
-            return;
         }
         else
         {
-            url= "/WEB-INF/login.jsp";
-            //getServletContext().getRequestDispatcher(url).forward(request, response);
             response.sendRedirect("login");
-            return;
         }
     }
 

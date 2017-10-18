@@ -25,7 +25,7 @@ public class LoginServlet extends HttpServlet {
     {
         
         String username =null;
-        User user = null;
+        User user;
         
         String action = request.getParameter("action");
         HttpSession session = request.getSession();
@@ -81,7 +81,6 @@ public class LoginServlet extends HttpServlet {
             session.removeAttribute("userlogin");
             request.setAttribute("Message", "Logged out successfully!");
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-            return;
         }
         
     }
@@ -111,8 +110,7 @@ public class LoginServlet extends HttpServlet {
            {
              request.setAttribute("Message","Invalid username or password!");
              request.setAttribute("user", myUser);
-             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);  
-             return;
+             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
            }
            else
            {
@@ -139,7 +137,6 @@ public class LoginServlet extends HttpServlet {
                HttpSession session = request.getSession();
                session.setAttribute("userlogin",user);   
                response.sendRedirect("home");
-               return;
            }
     }
 }
