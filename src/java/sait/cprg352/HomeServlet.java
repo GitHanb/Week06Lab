@@ -21,29 +21,33 @@ public class HomeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
+            throws ServletException, IOException 
+    {
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("userlogin");
-        
-        if(user!=null)
+        User user = (User)session.getAttribute("userlogin");
+        String url = "/WEB-INF/home.jsp";
+        if(user != null)
         {
             request.setAttribute("user", user);
-            getServletContext().getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
+            getServletContext().getRequestDispatcher(url).forward(request, response);
+            return;
         }
         else
         {
-            response.sendRedirect("login");
-            
+            url= "/WEB-INF/login.jsp";
+
+          //  request.setAttribute("rememberme", "checked");
+           // getServletContext().getRequestDispatcher(url).forward(request, response);
+           response.sendRedirect("login");
+            return;
         }
-        
-        
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-       
+            throws ServletException, IOException 
+    {
+        doGet(request,response);
     }
 
 }

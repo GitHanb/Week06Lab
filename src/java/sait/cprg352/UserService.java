@@ -13,15 +13,14 @@ import java.io.Serializable;
  */
 public class UserService implements Serializable
 {
-    public boolean login(String username, String password)
+    public User login(String name,String password)
     {
-        if((username.equals("adam")||username.equals("betty"))&& password.equals("password"))
+        User user=null;
+        if((name.trim().equals("adam") || name.trim().equals("betty") ) && password.equals("password") ) 
         {
-            return true;
+            user = new User(name,null);
+            System.out.println();
         }
-        else
-        {
-            return false;
-        }
+        return user;
     }
 }

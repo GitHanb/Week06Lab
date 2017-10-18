@@ -24,11 +24,12 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException 
     {
         String action = request.getParameter("action");
-        Cookie[] cookies = request.getCookies();
-        HttpSession session = request.getSession();
-        
+        System.out.println("action: "+action);
+        String username =null;
         User user = null;
-        String username = null;
+        Cookie[] cookies =request.getCookies();
+        
+        HttpSession session = request.getSession();
         
         if(action == null || action.isEmpty() ||action.equals("login"))
         {
@@ -38,28 +39,7 @@ public class LoginServlet extends HttpServlet {
                 return ;
             }
             if(cookies != null)
-            {
-                String cookiename = "username";
-                for(Cookie cookie : cookies)
-                {
-                    if(cookie.getName().equals(cookiename))
-                    {
-                        username = cookie.getValue();
-                    }
-            }
-            if(username != null)
-            {
-                user = new User(username,null);
-                request.setAttribute("user", user);
-            }
-            }
-            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-            return ;  
-        }
-        if(action.equals("logout"))
-        {
-            if(cookies != null)
-            {
+            {   
                 String cookiename = "username";
 
                 for(Cookie cookie : cookies)
@@ -75,11 +55,34 @@ public class LoginServlet extends HttpServlet {
                     request.setAttribute("user", user);
                 }
             }
-            session.removeAttribute("userlogin");
-            session.invalidate();
-            request.setAttribute("Message", "Logged out successfully!");
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+            return ;
         }
+        
+    if(action.equals("logout"))
+    {
+        if(cookies != null)
+        {
+            String cookiename = "username";
+
+            for(Cookie cookie : cookies)
+            {
+                if(cookie.getName().equals(cookiename))
+                {
+                    username = cookie.getValue();
+                }
+            }
+            if(username != null)
+            {
+                user = new User(username,null);
+                request.setAttribute("user", user);
+            }
+        }
+        session.removeAttribute("userlogin");
+        request.setAttribute("Message", "Logged out successfully!");
+        getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+        return;
+    }
         
     }
     @Override
@@ -88,52 +91,55 @@ public class LoginServlet extends HttpServlet {
     {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        User myUser = new User(username,password);
+        User user1 = new User(username,password);
 
-        String checkbox = request.getParameter("remember");
+        boolean rememberme = request.getParameter("rememberme")!=null;
          
          
-        if( username==null || password == null || username.trim().isEmpty() ||password.trim().isEmpty())
-        {
-            request.setAttribute("Message","Both values are required!");
-            request.setAttribute("user", myUser);
-            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-            return;
-        }
+         if( username==null || password == null || username.trim().isEmpty() ||password.trim().isEmpty())
+         {
+             request.setAttribute("display","Both values are required!");
+             request.setAttribute("user", user1);
+             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+             return;
+         }
 
-        UserService userservice = new UserService();
-        
-        if(userservice.login(username, password) == false)
-        {
-          request.setAttribute("Message","Invalid username or password!");
-          request.setAttribute("user", myUser);
-          getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);  
-        }
-        else
-        {
-            if(checkbox!=null)
-            {
-                Cookie cookie = new Cookie("username", username);
-                cookie.setMaxAge(3600);
-                cookie.setPath("/");
-                response.addCookie(cookie);
-            }
-            else
-            {
-                 Cookie[] cookies =request.getCookies();
-                 String cookiename = "username";
-                 for(Cookie cookie : cookies)
-                {
-                    if(cookie.getName().equals(cookiename))
-                    {
-                        cookie.setMaxAge(0);
-                        response.addCookie(cookie);
-                    }
-                }
-            }
-            HttpSession session = request.getSession();
-            session.setAttribute("userlogin",myUser);   
-            response.sendRedirect("home");
-        }
+            UserService us = new UserService();
+            User user = us.login(username, password);
+            
+           if( user == null)
+           {
+             request.setAttribute("Message","Invalid username or password!");
+             request.setAttribute("user", user1);
+             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);  
+             return;
+           }
+           else
+           {
+               if(rememberme==true)
+               {
+                   Cookie cookie = new Cookie("username", username);
+                   cookie.setMaxAge(3600);
+                   cookie.setPath("/");
+                   response.addCookie(cookie);
+               }
+               else
+               {
+                    Cookie[] cookies =request.getCookies();
+                    String cookiename = "username";
+                    for(Cookie cookie : cookies)
+                        {
+                            if(cookie.getName().equals(cookiename))
+                            {
+                                cookie.setMaxAge(0);
+                                response.addCookie(cookie);
+                            }
+                        }
+               }
+               HttpSession session = request.getSession();
+               session.setAttribute("userlogin",user);   
+               response.sendRedirect("home");
+               return;
+           }
     }
 }
