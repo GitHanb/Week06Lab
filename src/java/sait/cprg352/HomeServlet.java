@@ -24,7 +24,7 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException 
     {
         HttpSession session = request.getSession();
-        User user = (User)session.getAttribute("userlogin");
+        User user = (User) session.getAttribute("userlogin");
         String url = "/WEB-INF/home.jsp";
         if(user != null)
         {
@@ -35,10 +35,8 @@ public class HomeServlet extends HttpServlet {
         else
         {
             url= "/WEB-INF/login.jsp";
-
-          //  request.setAttribute("rememberme", "checked");
-           // getServletContext().getRequestDispatcher(url).forward(request, response);
-           response.sendRedirect("login");
+            //getServletContext().getRequestDispatcher(url).forward(request, response);
+            response.sendRedirect("login");
             return;
         }
     }

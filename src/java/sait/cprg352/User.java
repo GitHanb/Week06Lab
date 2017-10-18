@@ -18,8 +18,7 @@ public class User implements Serializable
 
     public User() 
     {
-        username="";
-        password="";
+
     }
 
     public User(String username, String password) {

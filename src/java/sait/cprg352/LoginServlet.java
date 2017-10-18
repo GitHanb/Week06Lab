@@ -23,12 +23,13 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException 
     {
-        String action = request.getParameter("action");
+        
         String username =null;
         User user = null;
-        Cookie[] cookies =request.getCookies();
         
+        String action = request.getParameter("action");
         HttpSession session = request.getSession();
+        Cookie[] cookies =request.getCookies();
         
         if(action == null || action.isEmpty() ||action.equals("login"))
         {
@@ -58,30 +59,30 @@ public class LoginServlet extends HttpServlet {
             return ;
         }
         
-    if(action.equals("logout"))
-    {
-        if(cookies != null)
+        if(action.equals("logout"))
         {
-            String cookiename = "username";
-
-            for(Cookie cookie : cookies)
+            if(cookies != null)
             {
-                if(cookie.getName().equals(cookiename))
+                String cookiename = "username";
+
+                for(Cookie cookie : cookies)
                 {
-                    username = cookie.getValue();
+                    if(cookie.getName().equals(cookiename))
+                    {
+                        username = cookie.getValue();
+                    }
+                }
+                if(username != null)
+                {
+                    user = new User(username,null);
+                    request.setAttribute("user", user);
                 }
             }
-            if(username != null)
-            {
-                user = new User(username,null);
-                request.setAttribute("user", user);
-            }
+            session.removeAttribute("userlogin");
+            request.setAttribute("Message", "Logged out successfully!");
+            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+            return;
         }
-        session.removeAttribute("userlogin");
-        request.setAttribute("Message", "Logged out successfully!");
-        getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-        return;
-    }
         
     }
     @Override
@@ -92,7 +93,7 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         User myUser = new User(username,password);
 
-        boolean rememberme = request.getParameter("rememberme")!=null;
+        String checkbox = request.getParameter("rememberme");
          
          
          if( username==null || password == null || username.trim().isEmpty() ||password.trim().isEmpty())
@@ -115,7 +116,7 @@ public class LoginServlet extends HttpServlet {
            }
            else
            {
-               if(rememberme==true)
+               if(checkbox!=null)
                {
                    Cookie cookie = new Cookie("username", username);
                    cookie.setMaxAge(3600);
