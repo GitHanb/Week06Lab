@@ -24,7 +24,6 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException 
     {
         String action = request.getParameter("action");
-        System.out.println("action: "+action);
         String username =null;
         User user = null;
         Cookie[] cookies =request.getCookies();
@@ -91,15 +90,15 @@ public class LoginServlet extends HttpServlet {
     {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        User user1 = new User(username,password);
+        User myUser = new User(username,password);
 
         boolean rememberme = request.getParameter("rememberme")!=null;
          
          
          if( username==null || password == null || username.trim().isEmpty() ||password.trim().isEmpty())
          {
-             request.setAttribute("display","Both values are required!");
-             request.setAttribute("user", user1);
+             request.setAttribute("Message","Both values are required!");
+             request.setAttribute("user", myUser);
              getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
              return;
          }
@@ -110,7 +109,7 @@ public class LoginServlet extends HttpServlet {
            if( user == null)
            {
              request.setAttribute("Message","Invalid username or password!");
-             request.setAttribute("user", user1);
+             request.setAttribute("user", myUser);
              getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);  
              return;
            }
