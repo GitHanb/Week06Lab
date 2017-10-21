@@ -5,13 +5,11 @@
  */
 package sait.cprg352;
 
-import java.io.Serializable;
-
 /**
  *
  * @author hanzh
  */
-public class UserService implements Serializable
+public class UserService
 {
     public User login(String name,String password)
     {
@@ -19,7 +17,6 @@ public class UserService implements Serializable
         if((name.trim().equals("adam") || name.trim().equals("betty") ) && password.equals("password") ) 
         {
             user = new User(name,null);
-            System.out.println();
         }
         return user;
     }
