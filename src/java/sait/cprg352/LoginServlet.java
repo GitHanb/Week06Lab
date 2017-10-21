@@ -71,7 +71,6 @@ public class LoginServlet extends HttpServlet
                 }
             }
             session.removeAttribute("userlogin");
-            System.out.print(session.getAttribute("userlogin"));
             request.setAttribute("display", "Logged out successfully!");
             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
             return;
