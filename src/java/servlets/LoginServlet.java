@@ -12,17 +12,15 @@ import sait.cprg352.UserService;
 
 public class LoginServlet extends HttpServlet 
 {
-
     @Override
      protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException 
      {
          String action = request.getParameter("action");
          HttpSession session = request.getSession();
-         
          String username = CookieUtil.getCookieValue(request.getCookies(), "username");
          //cookie check if cookie not null
-         if(username!=null && username.equals(""))
+         if(username!=null && !username.equals(""))
          {
              request.setAttribute("checked", "checked");
              request.setAttribute("username", username);   
