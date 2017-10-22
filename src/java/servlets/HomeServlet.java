@@ -1,4 +1,4 @@
-package sait.cprg352;
+package servlets;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -32,6 +32,6 @@ public class HomeServlet extends HttpServlet {
      protected void doPost(HttpServletRequest request, HttpServletResponse response)
              throws ServletException, IOException 
      {   
-         response.sendRedirect("login");
+         
      }
 }
