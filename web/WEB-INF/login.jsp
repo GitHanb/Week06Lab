@@ -1,4 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="ct" tagdir="/WEB-INF/tags" %>
+<%@taglib prefix="sait" uri="/WEB-INF/tlds/sait.tld" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -6,13 +9,10 @@
         <title>Remember Me Login Page</title>
     </head>
     <body>
-        <h1>Login</h1>
-        <form action="login" method="post">
-            <p>Username:<input type="text" name="username" value="${username}"></p>
-            <p>Password:<input type="password" name="password" value="${password}"></p>
-            <input type="submit" value="Login">
-            <p><input type="checkbox" name="remember" value="true" ${checked}>Remember me</p>
-        </form>
-            ${loginMessage}
+        <sait:debug debug="${param.debug!=null}">
+            Remote Host: ${pageContext.request.remoteHost}<br>
+            Session ID: ${pageContext.session.id}
+        </sait:debug>
+        <ct:login username="${username}" password="${password}" checked="${checked}" loginMessage="${loginMessage}">
     </body>
 </html>
