@@ -25,6 +25,7 @@ public class LoginServlet extends HttpServlet
              request.setAttribute("checked", "checked");
              request.setAttribute("username", username);   
          }
+         
          if(session.getAttribute("username")!=null && action==null)
          {
              response.sendRedirect("home");
@@ -68,7 +69,7 @@ public class LoginServlet extends HttpServlet
                  
                 Cookie usernameCookie = new Cookie("username", username);
              
-                if(rememberMe)
+                if(rememberMe == true)
                 {
                     usernameCookie.setMaxAge(60*60*24*365);
                     usernameCookie.setPath("/");
