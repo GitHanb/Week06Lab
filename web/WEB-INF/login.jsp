@@ -8,11 +8,11 @@
     <body>
         <h1>Login</h1>
         <form action="login" method="post">
-            <p>Username:<input type="text" name="Uname" value="${user.username}"></p>
-            <p>Password:<input type="password" name="Pword" value="${user.password}"></p>
+            <p>Username:<input type="text" name="username" value="${username}"></p>
+            <p>Password:<input type="password" name="password" value="${password}"></p>
             <input type="submit" value="Login">
-            <p><input type="checkbox" name="rememberme">Remember me</p>
+            <p><input type="checkbox" name="remember" value="true" ${checked}>Remember me</p>
         </form>
-            ${display}
+            ${loginMessage}
     </body>
 </html>

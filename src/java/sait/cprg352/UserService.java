@@ -11,13 +11,8 @@ package sait.cprg352;
  */
 public class UserService
 {
-    public User login(String name,String password)
+    public boolean login(String name,String password)
     {
-        User user=null;
-        if((name.trim().equals("adam") || name.trim().equals("betty") ) && password.equals("password") ) 
-        {
-            user = new User(name,null);
-        }
-        return user;
+        return (name.trim().equals("adam") || name.trim().equals("betty") ) && password.equals("password");
     }
 }

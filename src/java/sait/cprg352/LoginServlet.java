@@ -15,123 +15,91 @@ public class LoginServlet extends HttpServlet
      protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException 
      {
+         String action = request.getParameter("action");
+         HttpSession session = request.getSession();
          
-      String action = request.getParameter("action");
-      String username =null;
-      User user = null;
-      Cookie[] cookies =request.getCookies();
-        
-      HttpSession session = request.getSession();
-      if(action == null || action.isEmpty() ||action.equals("login"))
-      {
-        if(session.getAttribute("userlogin")!=null)
-        {
-            response.sendRedirect("home");
-            return ;
-        }
-        if(cookies != null)
-        {
-            String cookiename = "username";
-            for(Cookie cookie : cookies)
-            {
-                if(cookie.getName().equals(cookiename))
-                {
-                    username = cookie.getValue();
-                    System.out.println("username :"+username);
-                }
-            }
-            if(username != null)
-            {
-                user = new User(username,null);
-                request.setAttribute("user", user);
-            }
-        }
-        getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-        return ;
-      }
-        
-        if(action.equals("logout"))
-        {
-            if(cookies != null)
-            {
-                String cookiename = "username";
-
-                for(Cookie cookie : cookies)
-                {
-                    if(cookie.getName().equals(cookiename))
-                    {
-                        username = cookie.getValue();
-                        System.out.println("username :"+username);
-                    }
-                }
-                if(username != null)
-                {
-                    user = new User(username,null);
-                    request.setAttribute("user", user);
-                }
-            }
-            session.removeAttribute("userlogin");
-            request.setAttribute("display", "Logged out successfully!");
-            getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-            return;
-        }
+         String username = CookieUtil.getCookieValue(request.getCookies(), "username");
+         //cookie check if cookie not null
+         if(username!=null && username.equals(""))
+         {
+             request.setAttribute("checked", "checked");
+             request.setAttribute("username", username);   
+         }
+         if(session.getAttribute("username")!=null && action==null)
+         {
+             response.sendRedirect("home");
+             return;
+         }
+         
+         if(action!=null && action.equals("logout"))
+         {
+             session.removeAttribute("username");
+             session.invalidate();
+             request.setAttribute("loginMessage", "You have successfully logged out.");
+         }
+         request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);
         
      }
  
      @Override
      protected void doPost(HttpServletRequest request, HttpServletResponse response)
-             throws ServletException, IOException {
+             throws ServletException, IOException 
+     {
+         String username = request.getParameter("username");
+         String password = request.getParameter("password");
+         boolean rememberMe = false;
+         String rememberMeString = request.getParameter("remember");
+         String message = null;
          
-         String username = request.getParameter("Uname");
-         String password = request.getParameter("Pword");
-         User user1 = new User(username,password);
-
-         boolean rememberme = request.getParameter("rememberme")!=null;
-         
-         
-         if( username==null || password == null || username.trim().isEmpty() ||password.trim().isEmpty())
+         if(rememberMeString!=null)
          {
-             request.setAttribute("display","Both values are required!");
-             request.setAttribute("user", user1);
-             getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-             return;
+             rememberMe = Boolean.parseBoolean(rememberMeString);
          }
-
-         UserService us = new UserService();
-         User user = us.login(username, password);
-         if( user == null)
+         
+         if(username!=null && password!=null && !username.equals("") && !password.equals(""))
          {
-           request.setAttribute("display","Invalid username or password!");
-           request.setAttribute("user", user1);
-           getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);  
-           return;
+             UserService us = new UserService();
+             
+             if(us.login(username, password)==true)
+             {
+                HttpSession session = request.getSession();
+                session.setAttribute("username", username);
+                session.setMaxInactiveInterval(60);
+                 
+                Cookie usernameCookie = new Cookie("username", username);
+             
+                if(rememberMe)
+                {
+                    usernameCookie.setMaxAge(60*60*24*365);
+                    usernameCookie.setPath("/");
+                    response.addCookie(usernameCookie);
+                }
+                else
+                {
+                    if(usernameCookie!=null)
+                    {
+                        usernameCookie.setMaxAge(0);
+                        usernameCookie.setPath("/");
+                        response.addCookie(usernameCookie);
+                    }
+                }
+                request.setAttribute("username", username);
+                response.sendRedirect("home");
+                return;  
+             }
+             else
+             {
+                message = "Invalid username or password.";
+             }  
          }
          else
          {
-            if(rememberme==true)
-            {
-                Cookie cookie = new Cookie("username", username);
-                cookie.setMaxAge(3600);
-                cookie.setPath("/");
-                response.addCookie(cookie);
-            }
-            else
-            {
-                 Cookie[] cookies =request.getCookies();
-                 String cookiename = "username";
-                 for(Cookie cookie : cookies)
-                     {
-                         if(cookie.getName().equals(cookiename))
-                         {
-                             cookie.setMaxAge(0);
-                             response.addCookie(cookie);
-                         }
-                     }
-            }
-            HttpSession session = request.getSession();
-            session.setAttribute("userlogin",user);   
-            response.sendRedirect("home");
-            return;
+             message = "Both username and password are required.";
          }
+         request.setAttribute("username", username);
+         request.setAttribute("password", password);
+         request.setAttribute("loginMessage", message);
+         request.getRequestDispatcher("WEB-INF/login.jsp").forward(request, response);
      }
+     
 }

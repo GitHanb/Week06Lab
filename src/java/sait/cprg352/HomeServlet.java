@@ -11,31 +11,27 @@ public class HomeServlet extends HttpServlet {
 
    @Override
      protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException 
+     {
+         HttpSession session = request.getSession();
          
-           HttpSession session = request.getSession();
-           User user = (User)session.getAttribute("userlogin");
-           String url = "/WEB-INF/home.jsp";
-           if(user != null)
-           {
-               request.setAttribute("user", user);
-               getServletContext().getRequestDispatcher(url).forward(request, response);
-               return;
-           }
-           else
-           {
-               url= "/WEB-INF/login.jsp";
-               response.sendRedirect("login");
-               return;
-           }
+         //check session, if user logged in, go to home page
+         if(session.getAttribute("username")!=null)
+         {
+             String username = (String)session.getAttribute("username");
+             
+             request.setAttribute("username", username);
+             request.getRequestDispatcher("WEB-INF/home.jsp").forward(request, response);
+         }
+         //go to login page
+         response.sendRedirect("login");
            
      }
  
      @Override
      protected void doPost(HttpServletRequest request, HttpServletResponse response)
              throws ServletException, IOException 
-     {
-         
-         doGet(request,response);
+     {   
+         response.sendRedirect("login");
      }
 }
