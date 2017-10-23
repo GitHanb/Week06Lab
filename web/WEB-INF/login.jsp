@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="ct" tagdir="/WEB-INF/tags" %>
-<%@taglib prefix="sait" uri="/WEB-INF/tlds/sait.tld" %>
+<%@taglib prefix="sait.cprg352" uri="/WEB-INF/tlds/sait.tld" %>
 
 <!DOCTYPE html>
 <html>
@@ -13,6 +13,6 @@
             Remote Host: ${pageContext.request.remoteHost}<br>
             Session ID: ${pageContext.session.id}
         </sait:debug>
-        <ct:login username="${username}" password="${password}" checked="${checked}" loginMessage="${loginMessage}">
+        <ct:login username="${username}" password="${password}" checked="${checked}" loginMessage="${loginMessage}"></ct:login>
     </body>
 </html>
